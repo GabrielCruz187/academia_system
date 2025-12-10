@@ -4,29 +4,29 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Ballet-inspired color palette: Rose, white, light gray */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* Ballet academy premium aesthetic: Soft rose, beige, white, light gray */
+  --background: oklch(0.98 0.005 35);
+  --foreground: oklch(0.25 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.25 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.25 0 0);
 
-  /* Primary: Rose color */
-  --primary: oklch(0.671 0.11 14.79);
+  /* Primary: Soft rose/dusty rose */
+  --primary: oklch(0.66 0.12 15);
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.671 0.11 14.79);
-  --muted: oklch(0.94 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.671 0.11 14.79);
+  --secondary: oklch(0.93 0.01 35);
+  --secondary-foreground: oklch(0.66 0.12 15);
+  --muted: oklch(0.94 0.005 35);
+  --muted-foreground: oklch(0.56 0 0);
+  --accent: oklch(0.66 0.12 15);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.96 0 0);
-  --ring: oklch(0.671 0.11 14.79);
+  --border: oklch(0.93 0.005 35);
+  --input: oklch(0.97 0.005 35);
+  --ring: oklch(0.66 0.12 15);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -35,18 +35,18 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.671 0.11 14.79);
+  --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.671 0.11 14.79);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.671 0.11 14.79);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.15 0 0);
+  --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -70,12 +70,12 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.8 0.1 14.79);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.8 0.1 14.79);
+  --sidebar-ring: oklch(0.439 0 0);
 }
 
 @theme inline {
@@ -122,7 +122,27 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-light tracking-wide;
+  }
+}
+
+@layer components {
+  .text-balance-custom {
+    text-wrap: balance;
   }
 }

@@ -1,13 +1,13 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion } from "framer-motion"
 import { createClient } from "@/lib/supabase/client"
 
 export default function MatriculaPage() {
@@ -15,6 +15,7 @@ export default function MatriculaPage() {
   const supabase = createClient()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     full_name: "",
     address: "",
@@ -42,13 +43,20 @@ export default function MatriculaPage() {
     setError(null)
 
     try {
+      console.log("[v0] Submitting enrollment data:", formData)
+
       // Validar formato do CPF
       const cpfNumbers = formData.cpf.replace(/\D/g, "")
       if (cpfNumbers.length !== 11) {
         throw new Error("CPF deve ter 11 dígitos")
       }
 
-      // Inserir matrícula no banco de dados
+      const { data: existingCPF } = await supabase.from("enrollments").select("id").eq("cpf", cpfNumbers).single()
+
+      if (existingCPF) {
+        throw new Error("Este CPF já está cadastrado em nosso sistema")
+      }
+
       const { error: dbError } = await supabase.from("enrollments").insert([
         {
           full_name: formData.full_name,
@@ -60,128 +68,145 @@ export default function MatriculaPage() {
         },
       ])
 
+      console.log("[v0] Insert response:", dbError ? `Error: ${dbError.message}` : "Sucesso!")
+
       if (dbError) throw dbError
 
       // Redirecionar para página de confirmação
       router.push("/confirmacao")
     } catch (err) {
+      console.log("[v0] Error in handleSubmit:", err instanceof Error ? err.message : String(err))
       setError(err instanceof Error ? err.message : "Um erro ocorreu")
     } finally {
       setIsLoading(false)
     }
   }
 
+  const formFields = [
+    { name: "full_name", label: "Nome Completo", placeholder: "Digite seu nome", type: "text" },
+    { name: "address", label: "Endereço", placeholder: "Digite seu endereço completo", type: "text" },
+    { name: "phone", label: "Telefone", placeholder: "(11) 98765-4321", type: "tel" },
+    { name: "cpf", label: "CPF", placeholder: "123.456.789-00", type: "text" },
+    { name: "date_of_birth", label: "Data de Nascimento", placeholder: "", type: "date" },
+  ]
+
+  const completedSteps = Object.values(formData).filter((val) => val !== "").length
+  const totalSteps = formFields.length
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Formulário de Matrícula</h1>
-          <p className="text-muted-foreground">Complete seu registro para a academia de balé</p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-background to-pink-50/40">
+      {/* Header */}
+      <header className="border-b border-border/40 bg-white/40 backdrop-blur-sm">
+        <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img src="/balé.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
+            <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
+              <span className="font-light text-sm">Corpus Maria</span>
+            </Link>
+          </div>
+          <h1 className="text-lg font-light text-foreground">Formulário de Matrícula</h1>
+          <div className="w-16" />
+        </nav>
+      </header>
 
-        {/* Form Card */}
-        <Card className="border-border">
-          <CardHeader className="bg-white border-b border-border">
-            <CardTitle>Informações Pessoais</CardTitle>
-            <CardDescription>Por favor, forneça seus dados para se matricular</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Nome Completo */}
-              <div className="space-y-2">
-                <Label htmlFor="full_name">Nome Completo</Label>
-                <Input
-                  id="full_name"
-                  name="full_name"
-                  placeholder="Digite seu nome completo"
-                  required
-                  value={formData.full_name}
-                  onChange={handleChange}
-                  className="rounded-lg"
-                />
-              </div>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Progress Bar */}
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-light text-foreground">Seus Dados</h2>
+            <p className="text-sm text-foreground/60 font-light">
+              {completedSteps} de {totalSteps}
+            </p>
+          </div>
+          <div className="w-full h-1 bg-border/40 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-primary rounded-full"
+              initial={{ width: "0%" }}
+              animate={{ width: `${(completedSteps / totalSteps) * 100}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+        </motion.div>
 
-              {/* Endereço */}
-              <div className="space-y-2">
-                <Label htmlFor="address">Endereço</Label>
-                <Input
-                  id="address"
-                  name="address"
-                  placeholder="Digite seu endereço completo"
-                  required
-                  value={formData.address}
-                  onChange={handleChange}
-                  className="rounded-lg"
-                />
-              </div>
-
-              {/* Telefone */}
-              <div className="space-y-2">
-                <Label htmlFor="phone">Telefone</Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  placeholder="(11) 98765-4321"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => {
+        {/* Form */}
+        <motion.form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {formFields.map((field, idx) => (
+            <motion.div
+              key={field.name}
+              className="space-y-2"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.05 }}
+            >
+              <Label htmlFor={field.name} className="font-light text-foreground/80">
+                {field.label}
+              </Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                placeholder={field.placeholder}
+                required
+                value={formData[field.name as keyof typeof formData]}
+                onChange={(e) => {
+                  if (field.name === "phone") {
                     const formatted = formatPhone(e.target.value)
-                    setFormData((prev) => ({ ...prev, phone: formatted }))
-                  }}
-                  className="rounded-lg"
-                />
-              </div>
-
-              {/* CPF */}
-              <div className="space-y-2">
-                <Label htmlFor="cpf">CPF</Label>
-                <Input
-                  id="cpf"
-                  name="cpf"
-                  placeholder="123.456.789-00"
-                  required
-                  value={formData.cpf}
-                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, [field.name]: formatted }))
+                  } else if (field.name === "cpf") {
                     const formatted = formatCPF(e.target.value)
-                    setFormData((prev) => ({ ...prev, cpf: formatted }))
-                  }}
-                  maxLength="14"
-                  className="rounded-lg"
-                />
-              </div>
+                    setFormData((prev) => ({ ...prev, [field.name]: formatted }))
+                  } else {
+                    handleChange(e)
+                  }
+                }}
+                maxLength={field.name === "cpf" ? 14 : undefined}
+                className="rounded-lg font-light border-border/40 bg-white/60 backdrop-blur-sm"
+              />
+            </motion.div>
+          ))}
 
-              {/* Data de Nascimento */}
-              <div className="space-y-2">
-                <Label htmlFor="date_of_birth">Data de Nascimento</Label>
-                <Input
-                  id="date_of_birth"
-                  name="date_of_birth"
-                  type="date"
-                  required
-                  value={formData.date_of_birth}
-                  onChange={handleChange}
-                  className="rounded-lg"
-                />
-              </div>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-50/80 border border-red-200/40 text-red-700 px-4 py-3 rounded-lg font-light text-sm"
+            >
+              {error}
+            </motion.div>
+          )}
 
-              {/* Mensagem de Erro */}
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{error}</div>
-              )}
+          {/* Submit Button */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="pt-6">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-light py-6 transition-all hover:shadow-lg"
+            >
+              {isLoading ? "Processando..." : "Continuar para Pagamento"}
+            </Button>
+          </motion.div>
+        </motion.form>
 
-              {/* Botão de Envio */}
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-semibold py-3"
-              >
-                {isLoading ? "Processando..." : "Continuar para Pagamento"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+        {/* Info Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-12 bg-white/40 backdrop-blur border border-primary/10 rounded-xl p-6 text-center"
+        >
+          <p className="text-sm font-light text-foreground/70">
+            Seus dados estão seguros e criptografados. A taxa de matrícula é de{" "}
+            <span className="text-primary font-light">R$ 80,00</span>.
+          </p>
+        </motion.div>
       </div>
     </div>
   )
 }
+

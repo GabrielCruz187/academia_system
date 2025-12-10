@@ -1,32 +1,22 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const poppins = Poppins({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Academia de Balé - Matrícula",
-  description: "Realize sua matrícula na nossa academia de balé - elegante, moderno e profissional",
+  title: "Academia de Balé Premium - Matrícula Online",
+  description: "Descubra a elegância e graça do balé clássico. Junte-se à nossa academia de dança premiada.",
   generator: "v0.app",
   icons: {
     icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
       {
         url: "/icon.svg",
         type: "image/svg+xml",
       },
     ],
-    apple: "/apple-icon.png",
   },
 }
 
@@ -37,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`font-sans antialiased`}>
+      <body className={`${poppins.className} antialiased`}>
         {children}
         <Analytics />
       </body>
