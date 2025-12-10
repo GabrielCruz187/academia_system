@@ -4,28 +4,80 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
-import { BalletAnimation } from "@/components/ballet-animation"
+import { StageCurtain } from "@/components/stage-curtain"
+import { BalletParticles } from "@/components/ballet-particles"
+import { FloatingSilhouette } from "@/components/floating-silhouette"
+import { BallerinaSvgDrawing } from "@/components/ballerina-svg-drawing"
+import { BreathingBackground } from "@/components/breathing-background"
+import { RevealBar } from "@/components/reveal-bar"
+import { CurvedStrokeAnimation } from "@/components/curved-stroke-animation"
+import { AnimatedLogo } from "@/components/animated-logo"
+
+const letters = "CORPUS MARIA".split("")
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  }),
+}
+
+const titleVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+}
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 40 },
+  whileInView: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+}
+
+const staggerContainer = {
+  initial: {},
+  whileInView: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const sectionReveal = {
+  initial: { opacity: 0, y: 60 },
+  whileInView: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut", delay: 0.3 },
+  },
+}
 
 export default function Home() {
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    whileInView: { opacity: 1, y: 0 },
-    transition: { duration: 0.8, ease: "easeOut" },
-  }
-
-  const staggerContainer = {
-    initial: { opacity: 0 },
-    whileInView: { opacity: 1 },
-    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
-  }
-
   return (
-    <div className="bg-gradient-to-b from-pink-50 via-background to-pink-50/30">
-      {/* Navigation */}
+    <div className="relative">
+      <StageCurtain />
+      <BreathingBackground />
+      <BalletParticles />
+      <FloatingSilhouette />
+      <RevealBar />
+      <CurvedStrokeAnimation />
+
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/balé.jpg" alt="Corpus Maria Logo" className="w-10 h-10 rounded-full object-cover" />
+            <AnimatedLogo className="w-10 h-10 text-foreground" animate={false} />
             <span className="text-lg font-light text-foreground tracking-wide">Corpus Maria</span>
           </div>
 
@@ -39,6 +91,15 @@ export default function Home() {
             <a href="#turmas" className="text-sm font-light text-foreground/70 hover:text-foreground transition">
               Turmas
             </a>
+            <a href="#equipe" className="text-sm font-light text-foreground/70 hover:text-foreground transition">
+              Equipe
+            </a>
+            <a href="#uniformes" className="text-sm font-light text-foreground/70 hover:text-foreground transition">
+              Uniformes
+            </a>
+            <a href="#espetaculos" className="text-sm font-light text-foreground/70 hover:text-foreground transition">
+              Espetáculos
+            </a>
             <Link href="/matricula">
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 font-light">
                 Matricular
@@ -48,29 +109,42 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 bg-gradient-to-br from-pink-50 via-white to-pink-100/40">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-background to-secondary/3 -z-10" />
-
+      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <BalletAnimation />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
+            className="mb-8"
+          >
+            <AnimatedLogo className="w-32 h-32 mx-auto text-primary/80" animate={true} duration={4} delay={0.5} />
+          </motion.div>
+
+          <BallerinaSvgDrawing />
+
+          <motion.div variants={titleVariants} initial="hidden" animate="visible" className="mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-foreground tracking-[0.3em] mb-8">
+              {letters.map((letter, index) => (
+                <motion.span key={index} variants={letterVariants} className="inline-block">
+                  {letter === " " ? "\u00A0" : letter}
+                </motion.span>
+              ))}
+            </h1>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
             className="space-y-6"
           >
-            <motion.h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-light text-foreground tracking-tight"
-              style={{ lineHeight: "1.2" }}
-            >
+            <motion.h2 className="text-5xl sm:text-6xl lg:text-7xl font-light text-foreground tracking-tight leading-tight">
               A elegância da <span className="text-primary">dança</span> clássica
-            </motion.h1>
+            </motion.h2>
 
             <motion.p
               className="text-lg sm:text-xl text-foreground/60 font-light max-w-2xl mx-auto"
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 1 }}
             >
               Descubra uma jornada de movimento, graça e transformação. Nossa academia oferece aulas de balé em um
               ambiente refinado e acolhedor.
@@ -80,20 +154,24 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link href="/matricula">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base font-light transition-all hover:shadow-lg"
-              >
-                Realizar Matrícula
-              </Button>
+              <motion.div whileHover={{ scale: 1.06 }} transition={{ duration: 0.3 }}>
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-6 text-base font-light transition-all hover:shadow-[0_0_20px_rgba(229,197,200,0.6)]"
+                >
+                  Realizar Matrícula
+                </Button>
+              </motion.div>
             </Link>
-            <button className="px-8 py-6 rounded-full border border-primary/30 text-primary hover:bg-primary/5 font-light transition">
-              Saiba Mais
-            </button>
+            <motion.div whileHover={{ scale: 1.06 }} transition={{ duration: 0.3 }}>
+              <button className="px-8 py-6 rounded-full border border-primary/30 text-primary hover:bg-primary/5 font-light transition hover:shadow-[0_0_15px_rgba(229,197,200,0.4)]">
+                Saiba Mais
+              </button>
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -106,8 +184,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="sobre" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 border-t border-border/40">
+      <motion.section
+        id="sobre"
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 border-t border-border/40"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -151,12 +235,15 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Benefits Section */}
-      <section
+      <motion.section
         id="beneficios"
         className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-secondary/20"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
       >
         <div className="max-w-6xl mx-auto space-y-16">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center space-y-4">
@@ -181,7 +268,21 @@ export default function Home() {
               <motion.div
                 key={idx}
                 variants={fadeInUp}
-                className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+                whileHover={{
+                  y: -4,
+                  boxShadow: "0 10px 30px rgba(229, 197, 200, 0.3)",
+                }}
+                animate={{
+                  y: [0, -2, 0],
+                }}
+                transition={{
+                  y: {
+                    duration: 3 + idx * 0.5,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  },
+                }}
+                className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition-colors"
               >
                 <div className="text-4xl mb-4">{benefit.icon}</div>
                 <h3 className="text-xl font-light text-foreground mb-3">{benefit.title}</h3>
@@ -190,10 +291,16 @@ export default function Home() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Classes Section */}
-      <section id="turmas" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8">
+      <motion.section
+        id="turmas"
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div className="max-w-6xl mx-auto space-y-16">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center space-y-4">
             <p className="text-sm font-light text-primary uppercase tracking-widest">Programação</p>
@@ -216,8 +323,21 @@ export default function Home() {
               <motion.div
                 key={idx}
                 variants={fadeInUp}
-                whileHover={{ y: -5 }}
-                className="bg-white/40 backdrop-blur border border-primary/10 rounded-xl p-6 text-center hover:bg-white/60 transition"
+                whileHover={{
+                  y: -5,
+                  boxShadow: "0 8px 25px rgba(229, 197, 200, 0.25)",
+                }}
+                animate={{
+                  y: [0, -3, 0],
+                }}
+                transition={{
+                  y: {
+                    duration: 3 + idx * 0.3,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  },
+                }}
+                className="bg-white/40 backdrop-blur border border-primary/10 rounded-xl p-6 text-center hover:bg-white/60 transition-colors"
               >
                 <h3 className="text-lg font-light text-foreground mb-2">{classe.name}</h3>
                 <p className="text-sm text-foreground/60 font-light mb-3">{classe.age}</p>
@@ -226,14 +346,20 @@ export default function Home() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Uniforms Section */}
-      <section className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-primary/5">
-        <div className="max-w-6xl mx-auto space-y-12">
+      <motion.section
+        id="equipe"
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-pink-50/30"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="max-w-6xl mx-auto space-y-16">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center space-y-4">
-            <p className="text-sm font-light text-primary uppercase tracking-widest">Essencial</p>
-            <h2 className="text-4xl sm:text-5xl font-light text-foreground">Uniformes</h2>
+            <p className="text-sm font-light text-primary uppercase tracking-widest">Portifólio Corpu's Maria</p>
+            <h2 className="text-4xl sm:text-5xl font-light text-foreground">Nosso Time de Profissionais</h2>
           </motion.div>
 
           <motion.div
@@ -242,53 +368,239 @@ export default function Home() {
             whileInView="whileInView"
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
-            {[
-              { title: "Vestiário Infantil", desc: "Maillot rosa pastel, collant branco e sapatilhas" },
-              { title: "Vestiário Júnior", desc: "Maillot standard, collant preto e sapatilhas profissionais" },
-              { title: "Vestiário Adulto", desc: "Opções variadas de maillot, collant e sapatilhas" },
-            ].map((uniform, idx) => (
-              <motion.div key={idx} variants={fadeInUp} className="bg-white/50 border border-border/40 rounded-xl p-8">
-                <div className="w-12 h-12 bg-primary/20 rounded-full mb-6" />
-                <h3 className="text-xl font-light text-foreground mb-3">{uniform.title}</h3>
-                <p className="text-foreground/60 font-light">{uniform.desc}</p>
-              </motion.div>
-            ))}
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+            >
+              <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
+                <span className="text-2xl text-primary/60">✦</span>
+              </div>
+              <h3 className="text-xl font-light text-foreground mb-2 text-center">GIOVANA ALESSI TOSO</h3>
+              <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
+                <p>Psicóloga Especialista em Saúde Mental Coletiva</p>
+                <p>Professora de 1ª Año de Nível Elemental de Ballet Clássico</p>
+                <p>Pesquisadora do método dança movimento e terapia</p>
+                <p className="text-primary font-normal mt-4">Fundadora do Corpu's Maria</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+            >
+              <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
+                <span className="text-2xl text-primary/60">✦</span>
+              </div>
+              <h3 className="text-xl font-light text-foreground mb-2 text-center">ANA PAULA POTRICH</h3>
+              <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
+                <p>Bailarina do Corpu's Maria há mais de 10 anos</p>
+                <p>Monitora responsável pelas coreografias infantis</p>
+                <p className="text-primary font-normal mt-4">Diretora de marketing do Corpu's Maria</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={fadeInUp}
+              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+            >
+              <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
+                <span className="text-2xl text-primary/60">✦</span>
+              </div>
+              <h3 className="text-xl font-light text-foreground mb-2 text-center">MANUELA PAN</h3>
+              <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
+                <p>Bailarina do Corpu's Maria há 15 anos</p>
+                <p>Monitora e responsável pela recreação artística</p>
+                <p className="text-primary font-normal mt-4">Coordenadora das datas comemorativas do grupo</p>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Performances Section */}
-      <section className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8">
+      <motion.section
+        id="uniformes"
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div className="max-w-6xl mx-auto space-y-12">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center space-y-4">
-            <p className="text-sm font-light text-primary uppercase tracking-widest">Apresentações</p>
-            <h2 className="text-4xl sm:text-5xl font-light text-foreground">Nossos espetáculos</h2>
+            <p className="text-sm font-light text-primary uppercase tracking-widest">Portifólio Corpu's Maria</p>
+            <h2 className="text-4xl sm:text-5xl font-light text-foreground">Uniformes</h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/50 backdrop-blur-sm border border-border/40 rounded-2xl p-8 md:p-12"
+          >
+            <h3 className="text-2xl font-light text-foreground mb-6 text-center">Uso de:</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+              {[
+                "COLLANT (VERÃO)",
+                "CAMISETA",
+                "SAIA (COM MEIA CALÇA)",
+                "TOP",
+                "LEGGING",
+                "SAPATILHA",
+                "SHORT (COM MEIA CALÇA)",
+                "MOLETOM",
+                "COLLANT (INVERNO)",
+                "MEIA CALÇA",
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-center text-sm font-light text-foreground/80"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-border/40 pt-6 space-y-3 text-center">
+              <p className="text-sm text-foreground/70 font-light">
+                <span className="font-normal">Disponíveis para encomenda:</span> (54 984140643, Elenice)
+              </p>
+              <p className="text-sm text-foreground/60 font-light italic">
+                Não é obrigatória a aquisição de todas as peças
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 md:p-12"
+          >
+            <h3 className="text-2xl font-light text-foreground mb-6 text-center">A Importância do Uniforme</h3>
+            <div className="space-y-6 text-foreground/70 font-light">
+              <div className="flex gap-4">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                <p className="leading-relaxed">
+                  O uniforme permite que se observe com clareza a postura, o alinhamento corporal e a execução dos
+                  movimentos.
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                <p className="leading-relaxed">
+                  Fortalece o senso de pertencimento. Vestir o mesmo uniforme que as colegas estimula a união e o
+                  espírito de equipe dentro do grupo.
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                <p className="leading-relaxed">
+                  Proporciona liberdade e conforto, pois é desenvolvido especificamente para acompanhar as exigências
+                  físicas do balé.
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                <p className="leading-relaxed">
+                  É essencial que as bailarinas venham para as aulas devidamente uniformizadas. Demonstra
+                  comprometimento e contribui diretamente para o progresso técnico e artístico de cada aluna.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        id="espetaculos"
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-pink-50/30 to-background"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="max-w-6xl mx-auto space-y-12">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center space-y-4">
+            <p className="text-sm font-light text-primary uppercase tracking-widest">Portifólio Corpu's Maria</p>
+            <h2 className="text-4xl sm:text-5xl font-light text-foreground">Espetáculos</h2>
+            <p className="text-lg text-foreground/60 font-light max-w-3xl mx-auto">
+              Realizados de forma anual em duas sessões. Em cada ano seguimos uma temática nova, onde trabalhamos seus
+              conteúdos, emocionais e culturais.
+            </p>
           </motion.div>
 
           <motion.div
             variants={staggerContainer}
             initial="initial"
             whileInView="whileInView"
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
           >
-            {[1, 2, 3].map((_, idx) => (
-              <motion.div
-                key={idx}
-                variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
-                className="aspect-square bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl overflow-hidden cursor-pointer group"
-              >
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-6xl font-light text-primary/30 group-hover:scale-110 transition">✦</div>
+            {["Vida", "Maravilha's", "Bela", "Rara", "Desejo", "Valiosa", "Amare", "Libertá", "Imortalle"].map(
+              (show, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.05 }}
+                  className="aspect-square bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 rounded-xl flex items-center justify-center cursor-pointer group border border-primary/20 hover:border-primary/40 transition"
+                >
+                  <span className="text-lg font-light text-foreground group-hover:text-primary transition">{show}</span>
+                </motion.div>
+              ),
+            )}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/50 backdrop-blur-sm border border-border/40 rounded-2xl p-8 md:p-12 mt-12"
+          >
+            <h3 className="text-2xl font-light text-foreground mb-8 text-center">Organização do Espetáculo</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-primary text-sm">👨‍👩‍👧</span>
+                  </div>
+                  <div>
+                    <h4 className="font-normal text-foreground mb-2">Responsabilidade dos Pais</h4>
+                    <p className="text-sm text-foreground/70 font-light leading-relaxed">
+                      A responsabilidade pelos custos com maquiagem, cabelo e figurino fica a cargo dos pais e
+                      responsáveis das alunas, garantindo que todos estejam caracterizados de forma padronizada e
+                      adequada ao tema do evento. Ainda, o custo dos ingressos para os familiares e registros
+                      fotográficos.
+                    </p>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <span className="text-primary text-sm">🏢</span>
+                  </div>
+                  <div>
+                    <h4 className="font-normal text-foreground mb-2">Responsabilidade da Academia</h4>
+                    <p className="text-sm text-foreground/70 font-light leading-relaxed">
+                      Por sua vez, a Academia Corpo e Saúde se responsabiliza por toda a estrutura do espetáculo,
+                      incluindo iluminação, sonorização, impressão dos ingressos e decoração do espaço.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* CTA Section */}
-      <section className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 border-t border-border/40">
+      <motion.section
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 border-t border-border/40"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="space-y-4">
             <h2 className="text-4xl sm:text-5xl font-light text-foreground">Pronto para começar sua jornada?</h2>
@@ -316,9 +628,8 @@ export default function Home() {
             </button>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Footer */}
       <footer className="border-t border-border/40 bg-gradient-to-b from-background to-secondary/10 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
@@ -347,6 +658,21 @@ export default function Home() {
               <li>
                 <a href="#turmas" className="hover:text-primary transition">
                   Turmas
+                </a>
+              </li>
+              <li>
+                <a href="#equipe" className="hover:text-primary transition">
+                  Equipe
+                </a>
+              </li>
+              <li>
+                <a href="#uniformes" className="hover:text-primary transition">
+                  Uniformes
+                </a>
+              </li>
+              <li>
+                <a href="#espetaculos" className="hover:text-primary transition">
+                  Espetáculos
                 </a>
               </li>
             </ul>
@@ -390,5 +716,7 @@ export default function Home() {
     </div>
   )
 }
+
+
 
 
