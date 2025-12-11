@@ -1,9 +1,16 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useMemo } from "react"
+import { useMemo, useState, useEffect } from "react"
 
 export function BalletParticles() {
+  const [windowHeight, setWindowHeight] = useState(1000)
+
+  useEffect(() => {
+    // Set actual window height on client side
+    setWindowHeight(window.innerHeight)
+  }, [])
+
   const particles = useMemo(() => {
     return Array.from({ length: 20 }, (_, i) => ({
       id: i,
@@ -26,7 +33,7 @@ export function BalletParticles() {
             height: `${particle.size}px`,
           }}
           animate={{
-            y: [0, -window.innerHeight - 100],
+            y: [0, -windowHeight - 100],
             opacity: [0, 0.6, 0.6, 0],
             rotate: [0, 360],
           }}
