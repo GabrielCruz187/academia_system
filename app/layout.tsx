@@ -7,13 +7,13 @@ import "./globals.css"
 const poppins = Poppins({ weight: ["300", "400", "500", "600", "700"], subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Academia de Balé Premium - Matrícula Online",
+  title: "Corpus Maria - Matrícula Online",
   description: "Descubra a elegância e graça do balé clássico. Junte-se à nossa academia de dança premiada.",
   generator: "v0.app",
   icons: {
     icon: [
       {
-        url: "/icon.svg",
+        url: "/balé.jpg",
         type: "image/svg+xml",
       },
     ],

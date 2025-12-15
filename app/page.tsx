@@ -1,18 +1,19 @@
 "use client"
-export const dynamic = "force-dynamic"
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import {StageCurtain} from "@/components/stage-curtain"
+import {BalletParticles} from "@/components/ballet-particles"
+import {FloatingSilhouette} from "@/components/floating-silhouette"
+import {BallerinaSvgDrawing} from "@/components/ballerina-svg-drawing"
+import {BreathingBackground} from "@/components/breathing-background"
+import {RevealBar} from "@/components/reveal-bar"
+import {CurvedStrokeAnimation} from "@/components/curved-stroke-animation"
+import {AnimatedLogo} from "@/components/animated-logo"
+import { Menu, X } from "lucide-react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
-import { StageCurtain } from "@/components/stage-curtain"
-import { BalletParticles } from "@/components/ballet-particles"
-import { FloatingSilhouette } from "@/components/floating-silhouette"
-import { BallerinaSvgDrawing } from "@/components/ballerina-svg-drawing"
-import { BreathingBackground } from "@/components/breathing-background"
-import { RevealBar } from "@/components/reveal-bar"
-import { CurvedStrokeAnimation } from "@/components/curved-stroke-animation"
-import { AnimatedLogo } from "@/components/animated-logo"
 
 const letters = "CORPUS MARIA".split("")
 
@@ -65,9 +66,11 @@ const sectionReveal = {
   },
 }
 
-export default function Home() {
+export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   return (
-    <div className="relative">
+    <div className="relative min-h-screen">
       <StageCurtain />
       <BreathingBackground />
       <BalletParticles />
@@ -107,7 +110,69 @@ export default function Home() {
               </Button>
             </Link>
           </div>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-foreground hover:bg-accent rounded-lg transition"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </nav>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-4">
+              <a
+                href="#sobre"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Sobre
+              </a>
+              <a
+                href="#beneficios"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Benefícios
+              </a>
+              <a
+                href="#turmas"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Turmas
+              </a>
+              <a
+                href="#equipe"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Equipe
+              </a>
+              <a
+                href="#uniformes"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Uniformes
+              </a>
+              <a
+                href="#espetaculos"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Espetáculos
+              </a>
+              <Link href="/matricula" onClick={() => setMobileMenuOpen(false)}>
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 font-light w-full">
+                  Matricular
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20">
@@ -717,6 +782,10 @@ export default function Home() {
     </div>
   )
 }
+
+
+
+
 
 
 

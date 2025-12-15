@@ -76,10 +76,15 @@ export default function AdminPage() {
             <span className="font-light text-sm text-foreground">Corpus Maria</span>
           </div>
           <h1 className="text-lg font-light text-foreground">Painel de Administração</h1>
-          <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-light text-sm">Voltar</span>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/admin/financeiro" className="text-foreground hover:text-primary transition">
+              <span className="font-light text-sm">Financeiro</span>
+            </Link>
+            <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="font-light text-sm">Voltar</span>
+            </Link>
+          </div>
         </nav>
       </header>
 
