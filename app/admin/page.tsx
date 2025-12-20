@@ -12,6 +12,10 @@ interface Enrollment {
   full_name: string
   phone: string
   cpf: string
+  date_of_birth: string
+  age: number
+  selected_class: string
+  shift: string
   created_at: string
   payment_status: string
 }
@@ -27,7 +31,7 @@ export default function AdminPage() {
       try {
         const { data, error: fetchError } = await supabase
           .from("enrollments")
-          .select("id, full_name, phone, cpf, created_at, payment_status")
+          .select("id, full_name, phone, cpf, date_of_birth, age, selected_class, shift, created_at, payment_status")
           .order("created_at", { ascending: false })
 
         if (fetchError) throw fetchError
@@ -70,29 +74,33 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-background to-pink-50/40">
       {/* Header */}
       <header className="border-b border-border/40 bg-white/40 backdrop-blur-sm sticky top-0 z-40">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/balé.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
-            <span className="font-light text-sm text-foreground">Corpus Maria</span>
-          </div>
-          <h1 className="text-lg font-light text-foreground">Painel de Administração</h1>
-          <div className="flex items-center gap-4">
-            <Link href="/admin/financeiro" className="text-foreground hover:text-primary transition">
-              <span className="font-light text-sm">Financeiro</span>
-            </Link>
-            <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
-              <ArrowLeft className="w-4 h-4" />
-              <span className="font-light text-sm">Voltar</span>
-            </Link>
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <img src="/images/bal-c3-a9.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
+              <span className="font-light text-sm text-foreground">Corpus Maria</span>
+            </div>
+            <h1 className="text-base sm:text-lg font-light text-foreground">Painel de Administração</h1>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Link href="/admin/financeiro" className="text-foreground hover:text-primary transition">
+                <span className="font-light text-xs sm:text-sm">Financeiro</span>
+              </Link>
+              <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
+                <ArrowLeft className="w-4 h-4" />
+                <span className="font-light text-xs sm:text-sm">Voltar</span>
+              </Link>
+            </div>
           </div>
         </nav>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <h2 className="text-4xl font-light text-foreground mb-2">Gerenciamento de Matrículas</h2>
-          <p className="text-foreground/60 font-light">Acompanhe todos os registros de alunos</p>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-foreground mb-2">
+            Gerenciamento de Matrículas
+          </h2>
+          <p className="text-sm sm:text-base text-foreground/60 font-light">Acompanhe todos os registros de alunos</p>
         </motion.div>
 
         {/* Stats Cards */}
@@ -100,7 +108,7 @@ export default function AdminPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12"
         >
           {[
             { icon: Users, label: "Total de Matrículas", value: totalEnrollments, color: "primary" },
@@ -144,9 +152,9 @@ export default function AdminPage() {
           transition={{ delay: 0.3 }}
           className="bg-white/60 backdrop-blur border border-border/40 rounded-xl overflow-hidden"
         >
-          <div className="p-6 border-b border-border/40">
-            <h3 className="text-xl font-light text-foreground">Todas as Matrículas</h3>
-            <p className="text-sm font-light text-foreground/60">Lista completa de alunos matriculados</p>
+          <div className="p-4 sm:p-6 border-b border-border/40">
+            <h3 className="text-lg sm:text-xl font-light text-foreground">Todas as Matrículas</h3>
+            <p className="text-xs sm:text-sm font-light text-foreground/60">Lista completa de alunos matriculados</p>
           </div>
 
           <div className="overflow-x-auto">
@@ -168,56 +176,82 @@ export default function AdminPage() {
                 <p className="text-foreground/60 font-light">Nenhuma matrícula ainda</p>
               </div>
             ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-foreground/5 border-border/40 hover:bg-foreground/5">
-                    <TableHead className="text-foreground font-light">Nome</TableHead>
-                    <TableHead className="text-foreground font-light">Telefone</TableHead>
-                    <TableHead className="text-foreground font-light">CPF</TableHead>
-                    <TableHead className="text-foreground font-light">Data da Matrícula</TableHead>
-                    <TableHead className="text-foreground font-light">Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {enrollments.map((enrollment, idx) => (
-                    <motion.tr
-                      key={enrollment.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="border-b border-border/40 hover:bg-foreground/5 transition"
-                    >
-                      <TableCell className="text-foreground font-light">{enrollment.full_name}</TableCell>
-                      <TableCell className="text-foreground/70 font-light">{formatPhone(enrollment.phone)}</TableCell>
-                      <TableCell className="text-foreground/70 font-light">{formatCPF(enrollment.cpf)}</TableCell>
-                      <TableCell className="text-foreground/70 font-light">
-                        {formatDate(enrollment.created_at)}
-                      </TableCell>
-                      <TableCell>
-                        <motion.span
-                          initial={{ scale: 0.8 }}
-                          animate={{ scale: 1 }}
-                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-light ${
-                            enrollment.payment_status === "aguardando_pagamento"
-                              ? "bg-yellow-100/60 text-yellow-700"
-                              : "bg-green-100/60 text-green-700"
-                          }`}
-                        >
-                          {enrollment.payment_status === "aguardando_pagamento" ? (
-                            <>
-                              <AlertCircle className="w-3 h-3" /> Aguardando
-                            </>
-                          ) : (
-                            <>
-                              <CheckCircle2 className="w-3 h-3" /> Pago
-                            </>
-                          )}
-                        </motion.span>
-                      </TableCell>
-                    </motion.tr>
-                  ))}
-                </TableBody>
-              </Table>
+              <div className="min-w-[800px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-foreground/5 border-border/40 hover:bg-foreground/5">
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Nome</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">CPF</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Telefone</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">
+                        Data de Nascimento
+                      </TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Idade</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Turma</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Turno</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Data da Matrícula</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {enrollments.map((enrollment, idx) => (
+                      <motion.tr
+                        key={enrollment.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="border-b border-border/40 hover:bg-foreground/5 transition"
+                      >
+                        <TableCell className="text-foreground font-light text-xs sm:text-sm">
+                          {enrollment.full_name}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {formatCPF(enrollment.cpf)}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {formatPhone(enrollment.phone)}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {enrollment.date_of_birth ? formatDate(enrollment.date_of_birth) : "-"}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {enrollment.age ? `${enrollment.age} anos` : "-"}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {enrollment.selected_class || "-"}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {enrollment.shift || "-"}
+                        </TableCell>
+                        <TableCell className="text-foreground/70 font-light text-xs sm:text-sm">
+                          {formatDate(enrollment.created_at)}
+                        </TableCell>
+                        <TableCell>
+                          <motion.span
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            className={`inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-xs font-light ${
+                              enrollment.payment_status === "aguardando_pagamento"
+                                ? "bg-yellow-100/60 text-yellow-700"
+                                : "bg-green-100/60 text-green-700"
+                            }`}
+                          >
+                            {enrollment.payment_status === "aguardando_pagamento" ? (
+                              <>
+                                <AlertCircle className="w-3 h-3" /> Aguardando
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle2 className="w-3 h-3" /> Pago
+                              </>
+                            )}
+                          </motion.span>
+                        </TableCell>
+                      </motion.tr>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </div>
         </motion.div>
@@ -225,5 +259,7 @@ export default function AdminPage() {
     </div>
   )
 }
+
+
 
 

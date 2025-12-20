@@ -2,14 +2,13 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {StageCurtain} from "@/components/stage-curtain"
-import {BalletParticles} from "@/components/ballet-particles"
-import {FloatingSilhouette} from "@/components/floating-silhouette"
-import {BallerinaSvgDrawing} from "@/components/ballerina-svg-drawing"
-import {BreathingBackground} from "@/components/breathing-background"
-import {RevealBar} from "@/components/reveal-bar"
-import {CurvedStrokeAnimation} from "@/components/curved-stroke-animation"
-import {AnimatedLogo} from "@/components/animated-logo"
+import { StageCurtain } from "@/components/stage-curtain"
+import { BalletParticles } from "@/components/ballet-particles"
+import { FloatingSilhouette } from "@/components/floating-silhouette"
+import { BallerinaSvgDrawing } from "@/components/ballerina-svg-drawing"
+import { BreathingBackground } from "@/components/breathing-background"
+import { RevealBar } from "@/components/reveal-bar"
+import { CurvedStrokeAnimation } from "@/components/curved-stroke-animation"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
@@ -66,7 +65,7 @@ const sectionReveal = {
   },
 }
 
-export default function HomePage() {
+export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -81,7 +80,7 @@ export default function HomePage() {
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <AnimatedLogo className="w-10 h-10 text-foreground" animate={false} />
+            <img src="logo2.png" alt="Corpus Maria Logo" className="w-10 h-10 object-contain" />
             <span className="text-lg font-light text-foreground tracking-wide">Corpus Maria</span>
           </div>
 
@@ -103,6 +102,9 @@ export default function HomePage() {
             </a>
             <a href="#espetaculos" className="text-sm font-light text-foreground/70 hover:text-foreground transition">
               Espetáculos
+            </a>
+            <a href="#familia" className="text-sm font-light text-foreground/70 hover:text-foreground transition">
+              Corpus Maria é Família
             </a>
             <Link href="/matricula">
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 font-light">
@@ -165,6 +167,13 @@ export default function HomePage() {
               >
                 Espetáculos
               </a>
+              <a
+                href="#familia"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-light text-foreground/70 hover:text-foreground transition py-2"
+              >
+                Corpus Maria é Família
+              </a>
               <Link href="/matricula" onClick={() => setMobileMenuOpen(false)}>
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 font-light w-full">
                   Matricular
@@ -183,7 +192,11 @@ export default function HomePage() {
             transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
             className="mb-8"
           >
-            <AnimatedLogo className="w-32 h-32 mx-auto text-primary/80" animate={true} duration={4} delay={0.5} />
+            <img
+              src="/logo2.png"
+              alt="Corpus Maria Logo"
+              className="w-32 h-32 mx-auto object-contain opacity-80"
+            />
           </motion.div>
 
           <BallerinaSvgDrawing />
@@ -601,18 +614,34 @@ export default function HomePage() {
             whileInView="whileInView"
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
           >
-            {["Vida", "Maravilha's", "Bela", "Rara", "Desejo", "Valiosa", "Amare", "Libertá", "Imortalle"].map(
-              (show, idx) => (
-                <motion.div
-                  key={idx}
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.05 }}
-                  className="aspect-square bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 rounded-xl flex items-center justify-center cursor-pointer group border border-primary/20 hover:border-primary/40 transition"
-                >
-                  <span className="text-lg font-light text-foreground group-hover:text-primary transition">{show}</span>
-                </motion.div>
-              ),
-            )}
+            {[
+              { name: "Vida", image: "/vida.jpeg" },
+              { name: "Maravilha's", image: "/maravilha´s.jpeg" },
+              { name: "Bela", image: "/bela.jpeg" },
+              { name: "Rara", image: "/rara.jpeg" },
+              { name: "Desejo", image: "/desejo.jpeg" },
+              { name: "Valiosa", image: "/valiosa.jpeg" },
+              { name: "Amare", image: "/amare.jpeg" },
+              { name: "Libertá", image: "/liberta.jpeg" },
+              { name: "Imortalle", image: "/imortalle.jpeg" },
+              { name: "Valente", image: "/valente.jpeg" },
+            ].map((show, idx) => (
+              <motion.div
+                key={idx}
+                variants={fadeInUp}
+                whileHover={{ scale: 1.05 }}
+                className="aspect-square bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 rounded-xl overflow-hidden cursor-pointer group border border-primary/20 hover:border-primary/40 transition relative"
+              >
+                <img
+                  src={show.image || "/placeholder.svg"}
+                  alt={show.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end justify-center pb-4">
+                  <span className="text-lg font-light text-white drop-shadow-lg">{show.name}</span>
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
 
           <motion.div
@@ -656,6 +685,78 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        id="familia"
+        className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8"
+        variants={sectionReveal}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="max-w-6xl mx-auto space-y-12">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-center space-y-4">
+            <p className="text-sm font-light text-primary uppercase tracking-widest">Comunidade</p>
+            <h2 className="text-4xl sm:text-5xl font-light text-foreground">Corpus Maria é Família</h2>
+            <p className="text-lg text-foreground/60 font-light max-w-3xl mx-auto">
+              Momentos especiais que compartilhamos juntos, celebrando a arte, o movimento e a união.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="whileInView"
+            className="grid grid-cols-2 md:grid-cols-3 gap-4"
+          >
+            {[
+              { type: "image", src: "IMG_2455.jpg", alt: "Família Corpus Maria" },
+              { type: "youtube", src: "dança.MP4" },
+              { type: "image", src: "/IMG_2498.jpg", alt: "Evento Especial" },
+              { type: "video", src: "/dança2.mp4" },
+              { type: "image", src: "IMG_2596.jpg", alt: "Celebração" },
+              { type: "image", src: "alongamento.jpg", alt: "Momentos Inesquecíveis" },
+            ].map((media, idx) => (
+              <motion.div
+                key={idx}
+                variants={fadeInUp}
+                className="aspect-video bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 rounded-xl overflow-hidden border border-primary/20 hover:border-primary/40 transition group"
+              >
+                {media.type === "image" && (
+                  <img
+                    src={media.src || "/placeholder.svg"}
+                    alt={media.alt || "Corpus Maria Família"}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
+
+                {media.type === "youtube" && (
+                  <iframe
+                    src={media.src}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                )}
+
+                {media.type === "video" && <video src={media.src} controls className="w-full h-full object-cover" />}
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/50 backdrop-blur-sm border border-border/40 rounded-2xl p-8 text-center"
+          >
+            <p className="text-foreground/70 font-light leading-relaxed">
+              Aqui você pode adicionar fotos e vídeos das nossas celebrações, eventos especiais, e momentos
+              inesquecíveis que vivemos como uma grande família do Corpus Maria.
+            </p>
           </motion.div>
         </div>
       </motion.section>
@@ -741,6 +842,11 @@ export default function HomePage() {
                   Espetáculos
                 </a>
               </li>
+              <li>
+                <a href="#familia" className="hover:text-primary transition">
+                  Corpus Maria é Família
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -749,7 +855,7 @@ export default function HomePage() {
             <ul className="space-y-2 text-sm font-light text-foreground/60">
               <li>(11) 9999-9999</li>
               <li>contato@academiadebale.com.br</li>
-              <li>São Paulo, SP</li>
+              <li>Constantina, RS</li>
             </ul>
           </div>
 
@@ -766,27 +872,16 @@ export default function HomePage() {
                   Facebook
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-primary transition">
-                  TikTok
-                </a>
-              </li>
+              
             </ul>
           </div>
         </div>
 
         <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-border/40 text-center text-sm text-foreground/50 font-light">
-          <p>© 2025 Academia de Balé. Todos os direitos reservados.</p>
+          <p>© 2025 Academia corpo e saúde. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
   )
 }
-
-
-
-
-
-
-
 

@@ -1,14 +1,16 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { motion } from "framer-motion"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { motion, AnimatePresence } from "framer-motion"
 import { createClient } from "@/lib/supabase/client"
+import { calculateAge, getAvailableClasses, type ClassSchedule } from "@/lib/classes-data"
 
 export default function MatriculaPage() {
   const router = useRouter()
@@ -16,13 +18,38 @@ export default function MatriculaPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [step, setStep] = useState(1)
+  const [calculatedAge, setCalculatedAge] = useState<number | null>(null)
+  const [availableClasses, setAvailableClasses] = useState<ClassSchedule[]>([])
+  const [selectedClass, setSelectedClass] = useState<string>("")
+
   const [formData, setFormData] = useState({
     full_name: "",
     address: "",
     phone: "",
     cpf: "",
     date_of_birth: "",
+    shift: "",
   })
+
+  useEffect(() => {
+    if (formData.date_of_birth) {
+      const age = calculateAge(formData.date_of_birth)
+      setCalculatedAge(age)
+      const classes = getAvailableClasses(age)
+      setAvailableClasses(classes)
+
+      // Auto-select first available class if only one option
+      if (classes.length === 1) {
+        setSelectedClass(classes[0].displayName)
+      } else if (classes.length === 0) {
+        setSelectedClass("")
+      }
+    } else {
+      setCalculatedAge(null)
+      setAvailableClasses([])
+      setSelectedClass("")
+    }
+  }, [formData.date_of_birth])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -45,6 +72,10 @@ export default function MatriculaPage() {
     try {
       console.log("[v0] Submitting enrollment data:", formData)
 
+      if (!selectedClass) {
+        throw new Error("Por favor, selecione uma turma")
+      }
+
       // Validar formato do CPF
       const cpfNumbers = formData.cpf.replace(/\D/g, "")
       if (cpfNumbers.length !== 11) {
@@ -64,6 +95,9 @@ export default function MatriculaPage() {
           phone: formData.phone.replace(/\D/g, ""),
           cpf: cpfNumbers,
           date_of_birth: formData.date_of_birth,
+          age: calculatedAge,
+          selected_class: selectedClass,
+          shift: formData.shift,
           payment_status: "aguardando_pagamento",
         },
       ])
@@ -83,15 +117,15 @@ export default function MatriculaPage() {
   }
 
   const formFields = [
-    { name: "full_name", label: "Nome Completo", placeholder: "Digite seu nome", type: "text" },
-    { name: "address", label: "Endereço", placeholder: "Digite seu endereço completo", type: "text" },
-    { name: "phone", label: "Telefone", placeholder: "(11) 98765-4321", type: "tel" },
-    { name: "cpf", label: "CPF", placeholder: "123.456.789-00", type: "text" },
-    { name: "date_of_birth", label: "Data de Nascimento", placeholder: "", type: "date" },
+    { name: "full_name", label: "Nome Completo da Aluna", placeholder: "Digite o nome completo", type: "text" },
+    { name: "address", label: "Endereço", placeholder: "Digite o endereço completo", type: "text" },
+    { name: "phone", label: "Telefone do Responsável", placeholder: "(11) 98765-4321", type: "tel" },
+    { name: "cpf", label: "CPF do Responsável", placeholder: "123.456.789-00", type: "text" },
+    { name: "date_of_birth", label: "Data de Nascimento da Aluna", placeholder: "", type: "date" },
   ]
 
-  const completedSteps = Object.values(formData).filter((val) => val !== "").length
-  const totalSteps = formFields.length
+  const completedSteps = Object.values(formData).filter((val) => val !== "").length + (selectedClass ? 1 : 0)
+  const totalSteps = formFields.length + 1 // +1 for class selection
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-background to-pink-50/40">
@@ -99,7 +133,7 @@ export default function MatriculaPage() {
       <header className="border-b border-border/40 bg-white/40 backdrop-blur-sm">
         <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/balé.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
+            <img src="/logo2.png" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
             <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
               <span className="font-light text-sm">Corpus Maria</span>
             </Link>
@@ -113,7 +147,7 @@ export default function MatriculaPage() {
         {/* Progress Bar */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-light text-foreground">Seus Dados</h2>
+            <h2 className="text-2xl font-light text-foreground">Dados da Matrícula</h2>
             <p className="text-sm text-foreground/60 font-light">
               {completedSteps} de {totalSteps}
             </p>
@@ -171,6 +205,71 @@ export default function MatriculaPage() {
             </motion.div>
           ))}
 
+          <AnimatePresence mode="wait">
+            {calculatedAge !== null && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="space-y-4 pt-4"
+              >
+                {/* Age Display */}
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
+                  <p className="text-sm font-light text-primary">
+                    ✨ Idade identificada: <span className="font-medium">{calculatedAge} anos</span>
+                  </p>
+                </div>
+
+                {/* Available Classes */}
+                {availableClasses.length > 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="space-y-2"
+                  >
+                    <Label htmlFor="class-selection" className="font-light text-foreground/80">
+                      Turmas Disponíveis para esta Idade
+                    </Label>
+                    <Select value={selectedClass} onValueChange={(value) => setSelectedClass(value)} required>
+                      <SelectTrigger
+                        id="class-selection"
+                        className="rounded-lg font-light border-border/40 bg-white/60 backdrop-blur-sm"
+                      >
+                        <SelectValue placeholder="Selecione a turma desejada" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableClasses.map((classItem, idx) => (
+                          <SelectItem key={idx} value={classItem.displayName}>
+                            {classItem.displayName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground font-light">
+                      {availableClasses.length === 1
+                        ? "Apenas uma turma disponível para esta faixa etária"
+                        : `${availableClasses.length} turmas disponíveis para esta faixa etária`}
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-amber-50/80 border border-amber-200/40 rounded-lg p-4"
+                  >
+                    <p className="text-sm font-light text-amber-800">
+                      No momento não há turmas disponíveis para essa faixa etária. Entre em contato com a academia para
+                      mais informações.
+                    </p>
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -185,8 +284,8 @@ export default function MatriculaPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="pt-6">
             <Button
               type="submit"
-              disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-light py-6 transition-all hover:shadow-lg"
+              disabled={isLoading || !selectedClass}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-light py-6 transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Processando..." : "Continuar para Pagamento"}
             </Button>
@@ -209,4 +308,6 @@ export default function MatriculaPage() {
     </div>
   )
 }
+
+
 

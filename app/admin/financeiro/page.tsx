@@ -117,24 +117,28 @@ export default function FinanceiroPage() {
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-background to-pink-50/40">
       {/* Header */}
       <header className="border-b border-border/40 bg-white/40 backdrop-blur-sm sticky top-0 z-40">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/images/bal-c3-a9.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
-            <span className="font-light text-sm text-foreground">Corpus Maria</span>
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <img src="/images/bal-c3-a9.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
+              <span className="font-light text-sm text-foreground">Corpus Maria</span>
+            </div>
+            <h1 className="text-base sm:text-lg font-light text-foreground">Módulo Financeiro</h1>
+            <Link href="/admin" className="flex items-center gap-2 text-foreground hover:text-primary transition">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="font-light text-xs sm:text-sm">Admin</span>
+            </Link>
           </div>
-          <h1 className="text-lg font-light text-foreground">Módulo Financeiro</h1>
-          <Link href="/admin" className="flex items-center gap-2 text-foreground hover:text-primary transition">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-light text-sm">Admin</span>
-          </Link>
         </nav>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Title */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <h2 className="text-4xl font-light text-foreground mb-2">Visão Geral Financeira</h2>
-          <p className="text-foreground/60 font-light">Acompanhe receitas e indicadores da academia</p>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-foreground mb-2">Visão Geral Financeira</h2>
+          <p className="text-sm sm:text-base text-foreground/60 font-light">
+            Acompanhe receitas e indicadores da academia
+          </p>
         </motion.div>
 
         {isLoading ? (
@@ -152,7 +156,7 @@ export default function FinanceiroPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12"
             >
               {[
                 {
@@ -191,11 +195,11 @@ export default function FinanceiroPage() {
                     {...fadeInUp}
                     transition={{ delay: idx * 0.1 }}
                     whileHover={{ y: -4, boxShadow: "0 10px 30px rgba(229, 197, 200, 0.3)" }}
-                    className="bg-white/60 backdrop-blur border border-border/40 rounded-xl p-6 hover:border-primary/20 transition"
+                    className="bg-white/60 backdrop-blur border border-border/40 rounded-xl p-4 sm:p-6 hover:border-primary/20 transition"
                   >
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-3 sm:mb-4">
                       <div
-                        className={`p-3 rounded-lg ${
+                        className={`p-2 sm:p-3 rounded-lg ${
                           stat.color === "primary"
                             ? "bg-primary/10 text-primary"
                             : stat.color === "green"
@@ -205,11 +209,11 @@ export default function FinanceiroPage() {
                                 : "bg-blue-100/60 text-blue-700"
                         }`}
                       >
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
-                    <p className="text-sm font-light text-foreground/70 mb-1">{stat.label}</p>
-                    <p className="text-3xl font-light text-foreground mb-1">{stat.value}</p>
+                    <p className="text-xs sm:text-sm font-light text-foreground/70 mb-1">{stat.label}</p>
+                    <p className="text-2xl sm:text-3xl font-light text-foreground mb-1">{stat.value}</p>
                     <p className="text-xs font-light text-foreground/50">{stat.subtext}</p>
                   </motion.div>
                 )
@@ -217,17 +221,19 @@ export default function FinanceiroPage() {
             </motion.div>
 
             {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
               {/* Matrículas por Mês - Bar Chart */}
               <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
                 <Card className="bg-white/60 backdrop-blur border-border/40">
-                  <CardHeader>
-                    <CardTitle className="font-light text-foreground">Matrículas por Mês</CardTitle>
-                    <CardDescription className="font-light">
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="font-light text-foreground text-base sm:text-lg">
+                      Matrículas por Mês
+                    </CardTitle>
+                    <CardDescription className="font-light text-xs sm:text-sm">
                       Número de novas matrículas registradas mensalmente
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-4 sm:p-6">
                     <ChartContainer
                       config={{
                         matriculas: {
@@ -235,7 +241,7 @@ export default function FinanceiroPage() {
                           color: "hsl(var(--primary))",
                         },
                       }}
-                      className="h-[300px]"
+                      className="h-[250px] sm:h-[300px]"
                     >
                       <BarChart data={monthlyData}>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -252,11 +258,15 @@ export default function FinanceiroPage() {
               {/* Status de Pagamento - Pie Chart */}
               <motion.div {...fadeInUp} transition={{ delay: 0.3 }}>
                 <Card className="bg-white/60 backdrop-blur border-border/40">
-                  <CardHeader>
-                    <CardTitle className="font-light text-foreground">Status das Matrículas</CardTitle>
-                    <CardDescription className="font-light">Distribuição entre pagas e pendentes</CardDescription>
+                  <CardHeader className="p-4 sm:p-6">
+                    <CardTitle className="font-light text-foreground text-base sm:text-lg">
+                      Status das Matrículas
+                    </CardTitle>
+                    <CardDescription className="font-light text-xs sm:text-sm">
+                      Distribuição entre pagas e pendentes
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-4 sm:p-6">
                     <ChartContainer
                       config={{
                         pagas: {
@@ -268,7 +278,7 @@ export default function FinanceiroPage() {
                           color: "hsl(48, 96%, 53%)",
                         },
                       }}
-                      className="h-[300px]"
+                      className="h-[250px] sm:h-[300px]"
                     >
                       <PieChart>
                         <ChartTooltip content={<ChartTooltipContent />} />
@@ -278,7 +288,7 @@ export default function FinanceiroPage() {
                           cy="50%"
                           labelLine={false}
                           label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                          outerRadius={100}
+                          outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
                         >
@@ -297,11 +307,15 @@ export default function FinanceiroPage() {
             {/* Crescimento Acumulado - Line Chart */}
             <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
               <Card className="bg-white/60 backdrop-blur border-border/40">
-                <CardHeader>
-                  <CardTitle className="font-light text-foreground">Crescimento Acumulado</CardTitle>
-                  <CardDescription className="font-light">Total de alunos e receita ao longo do tempo</CardDescription>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="font-light text-foreground text-base sm:text-lg">
+                    Crescimento Acumulado
+                  </CardTitle>
+                  <CardDescription className="font-light text-xs sm:text-sm">
+                    Total de alunos e receita ao longo do tempo
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 sm:p-6">
                   <ChartContainer
                     config={{
                       total: {
@@ -313,7 +327,7 @@ export default function FinanceiroPage() {
                         color: "hsl(142, 76%, 36%)",
                       },
                     }}
-                    className="h-[350px]"
+                    className="h-[300px] sm:h-[350px]"
                   >
                     <LineChart data={cumulativeData}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -349,9 +363,9 @@ export default function FinanceiroPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="mt-8 bg-primary/10 backdrop-blur border border-primary/20 rounded-xl p-6 text-center"
+              className="mt-6 sm:mt-8 bg-primary/10 backdrop-blur border border-primary/20 rounded-xl p-4 sm:p-6 text-center"
             >
-              <p className="text-sm font-light text-foreground/70">
+              <p className="text-xs sm:text-sm font-light text-foreground/70">
                 Valor de matrícula fixo:{" "}
                 <span className="text-primary font-normal">R$ {ENROLLMENT_FEE.toFixed(2)}</span>
               </p>
@@ -365,3 +379,4 @@ export default function FinanceiroPage() {
     </div>
   )
 }
+
