@@ -13,6 +13,7 @@ import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
+import Image from "next/image"
 
 const letters = "CORPUS MARIA".split("")
 
@@ -192,11 +193,7 @@ export default function Home() {
             transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
             className="mb-8"
           >
-            <img
-              src="/logo2.png"
-              alt="Corpus Maria Logo"
-              className="w-32 h-32 mx-auto object-contain opacity-80"
-            />
+            <img src="/logo2.png" alt="Corpus Maria Logo" className="w-32 h-32 mx-auto object-contain opacity-80" />
           </motion.div>
 
           <BallerinaSvgDrawing />
@@ -277,8 +274,12 @@ export default function Home() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl flex items-center justify-center">
-              <div className="text-6xl font-light text-primary/30">✦</div>
+            <div className="aspect-square rounded-2xl overflow-hidden shadow-xl">
+              <img
+                src="/IMG_2498.jpg"
+                alt="Corpus Maria - Quem Somos"
+                className="w-full h-full object-cover"
+              />
             </div>
           </motion.div>
 
@@ -714,9 +715,7 @@ export default function Home() {
           >
             {[
               { type: "image", src: "IMG_2455.jpg", alt: "Família Corpus Maria" },
-              { type: "youtube", src: "dança.MP4" },
               { type: "image", src: "/IMG_2498.jpg", alt: "Evento Especial" },
-              { type: "video", src: "/dança2.mp4" },
               { type: "image", src: "IMG_2596.jpg", alt: "Celebração" },
               { type: "image", src: "alongamento.jpg", alt: "Momentos Inesquecíveis" },
             ].map((media, idx) => (
@@ -800,11 +799,14 @@ export default function Home() {
       <footer className="border-t border-border/40 bg-gradient-to-b from-background to-secondary/10 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-primary font-light">✦</span>
-              </div>
-              <span className="font-light text-foreground">Academia de Balé</span>
+            <div className="flex items-center gap-3">
+              <Image
+                src="/acad.jpeg"
+                alt="Corpo e Saúde Academia Logo"
+                width={120}
+                height={80}
+                className="object-contain"
+              />
             </div>
             <p className="text-sm text-foreground/60 font-light">Elegância em movimento</p>
           </div>
@@ -853,7 +855,7 @@ export default function Home() {
           <div className="space-y-4">
             <h4 className="font-light text-foreground">Contato</h4>
             <ul className="space-y-2 text-sm font-light text-foreground/60">
-              <li>(11) 9999-9999</li>
+              <li>(54) 99901-0633</li>
               <li>contato@academiadebale.com.br</li>
               <li>Constantina, RS</li>
             </ul>
@@ -872,7 +874,6 @@ export default function Home() {
                   Facebook
                 </a>
               </li>
-              
             </ul>
           </div>
         </div>
@@ -884,4 +885,3 @@ export default function Home() {
     </div>
   )
 }
-

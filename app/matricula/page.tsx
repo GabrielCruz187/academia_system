@@ -106,8 +106,16 @@ export default function MatriculaPage() {
 
       if (dbError) throw dbError
 
-      // Redirecionar para página de confirmação
-      router.push("/confirmacao")
+      const params = new URLSearchParams({
+        name: formData.full_name,
+        age: calculatedAge?.toString() || "",
+        class: selectedClass,
+        shift: formData.shift,
+        phone: formData.phone,
+        cpf: formData.cpf,
+      })
+
+      router.push(`/confirmation?${params.toString()}`)
     } catch (err) {
       console.log("[v0] Error in handleSubmit:", err instanceof Error ? err.message : String(err))
       setError(err instanceof Error ? err.message : "Um erro ocorreu")
@@ -133,7 +141,7 @@ export default function MatriculaPage() {
       <header className="border-b border-border/40 bg-white/40 backdrop-blur-sm">
         <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo2.png" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
+            <img src="/images/bal-c3-a9.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
             <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
               <span className="font-light text-sm">Corpus Maria</span>
             </Link>
@@ -308,6 +316,7 @@ export default function MatriculaPage() {
     </div>
   )
 }
+
 
 
 
