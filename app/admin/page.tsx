@@ -3,9 +3,22 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ArrowLeft, Users, CheckCircle2, AlertCircle } from "lucide-react"
+import { ArrowLeft, Users, CheckCircle2, AlertCircle, Edit, DollarSign } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 
 interface Enrollment {
   id: string
@@ -18,20 +31,35 @@ interface Enrollment {
   shift: string
   created_at: string
   payment_status: string
+  payment_amount?: number
+  payment_date?: string
+  payment_method?: string
+  payment_notes?: string
 }
 
 export default function AdminPage() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [editingEnrollment, setEditingEnrollment] = useState<Enrollment | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const supabase = createClient()
+
+  const [paymentForm, setPaymentForm] = useState({
+    payment_status: "aguardando_pagamento",
+    payment_amount: "",
+    payment_date: "",
+    payment_method: "",
+    payment_notes: "",
+  })
 
   useEffect(() => {
     const fetchEnrollments = async () => {
       try {
         const { data, error: fetchError } = await supabase
           .from("enrollments")
-          .select("id, full_name, phone, cpf, date_of_birth, age, selected_class, shift, created_at, payment_status")
+          .select("*")
           .order("created_at", { ascending: false })
 
         if (fetchError) throw fetchError
@@ -45,6 +73,54 @@ export default function AdminPage() {
 
     fetchEnrollments()
   }, [supabase])
+
+  const handleEdit = (enrollment: Enrollment) => {
+    setEditingEnrollment(enrollment)
+    setPaymentForm({
+      payment_status: enrollment.payment_status || "aguardando_pagamento",
+      payment_amount: enrollment.payment_amount?.toString() || "",
+      payment_date: enrollment.payment_date || "",
+      payment_method: enrollment.payment_method || "",
+      payment_notes: enrollment.payment_notes || "",
+    })
+    setIsDialogOpen(true)
+  }
+
+  const handleSavePayment = async () => {
+    if (!editingEnrollment) return
+
+    setIsSaving(true)
+    try {
+      const { error: updateError } = await supabase
+        .from("enrollments")
+        .update({
+          payment_status: paymentForm.payment_status,
+          payment_amount: paymentForm.payment_amount ? Number.parseFloat(paymentForm.payment_amount) : null,
+          payment_date: paymentForm.payment_date || null,
+          payment_method: paymentForm.payment_method || null,
+          payment_notes: paymentForm.payment_notes || null,
+        })
+        .eq("id", editingEnrollment.id)
+
+      if (updateError) throw updateError
+
+      // Refresh enrollments
+      const { data, error: fetchError } = await supabase
+        .from("enrollments")
+        .select("*")
+        .order("created_at", { ascending: false })
+
+      if (fetchError) throw fetchError
+      setEnrollments(data || [])
+
+      setIsDialogOpen(false)
+      setEditingEnrollment(null)
+    } catch (err) {
+      alert("Erro ao salvar: " + (err instanceof Error ? err.message : "Erro desconhecido"))
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -63,6 +139,9 @@ export default function AdminPage() {
   const totalEnrollments = enrollments.length
   const pendingPayments = enrollments.filter((e) => e.payment_status === "aguardando_pagamento").length
   const paidEnrollments = enrollments.filter((e) => e.payment_status === "pago").length
+  const totalRevenue = enrollments
+    .filter((e) => e.payment_status === "pago" && e.payment_amount)
+    .reduce((sum, e) => sum + (e.payment_amount || 0), 0)
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -82,9 +161,6 @@ export default function AdminPage() {
             </div>
             <h1 className="text-base sm:text-lg font-light text-foreground">Painel de Administração</h1>
             <div className="flex items-center gap-3 sm:gap-4">
-              <Link href="/admin/financeiro" className="text-foreground hover:text-primary transition">
-                <span className="font-light text-xs sm:text-sm">Financeiro</span>
-              </Link>
               <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary transition">
                 <ArrowLeft className="w-4 h-4" />
                 <span className="font-light text-xs sm:text-sm">Voltar</span>
@@ -108,12 +184,18 @@ export default function AdminPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ staggerChildren: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12"
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12"
         >
           {[
             { icon: Users, label: "Total de Matrículas", value: totalEnrollments, color: "primary" },
             { icon: AlertCircle, label: "Aguardando Pagamento", value: pendingPayments, color: "yellow" },
             { icon: CheckCircle2, label: "Matrículas Pagas", value: paidEnrollments, color: "green" },
+            {
+              icon: DollarSign,
+              label: "Receita Total",
+              value: `R$ ${totalRevenue.toFixed(2)}`,
+              color: "blue",
+            },
           ].map((stat, idx) => {
             const Icon = stat.icon
             return (
@@ -126,7 +208,7 @@ export default function AdminPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm font-light text-foreground/70 mb-2">{stat.label}</p>
-                    <p className="text-4xl font-light text-foreground">{stat.value}</p>
+                    <p className="text-3xl font-light text-foreground">{stat.value}</p>
                   </div>
                   <div
                     className={`p-3 rounded-lg ${
@@ -134,7 +216,9 @@ export default function AdminPage() {
                         ? "bg-primary/10 text-primary"
                         : stat.color === "yellow"
                           ? "bg-yellow-100/60 text-yellow-700"
-                          : "bg-green-100/60 text-green-700"
+                          : stat.color === "green"
+                            ? "bg-green-100/60 text-green-700"
+                            : "bg-blue-100/60 text-blue-700"
                     }`}
                   >
                     <Icon className="w-6 h-6" />
@@ -176,7 +260,7 @@ export default function AdminPage() {
                 <p className="text-foreground/60 font-light">Nenhuma matrícula ainda</p>
               </div>
             ) : (
-              <div className="min-w-[800px]">
+              <div className="min-w-[1000px]">
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-foreground/5 border-border/40 hover:bg-foreground/5">
@@ -191,6 +275,7 @@ export default function AdminPage() {
                       <TableHead className="text-foreground font-light text-xs sm:text-sm">Turno</TableHead>
                       <TableHead className="text-foreground font-light text-xs sm:text-sm">Data da Matrícula</TableHead>
                       <TableHead className="text-foreground font-light text-xs sm:text-sm">Status</TableHead>
+                      <TableHead className="text-foreground font-light text-xs sm:text-sm">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -247,6 +332,16 @@ export default function AdminPage() {
                             )}
                           </motion.span>
                         </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEdit(enrollment)}
+                            className="text-primary hover:text-primary/80"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
                       </motion.tr>
                     ))}
                   </TableBody>
@@ -256,9 +351,97 @@ export default function AdminPage() {
           </div>
         </motion.div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Gerenciar Pagamento</DialogTitle>
+            <DialogDescription>
+              Atualize as informações de pagamento da matrícula de {editingEnrollment?.full_name}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="status">Status do Pagamento</Label>
+              <Select
+                value={paymentForm.payment_status}
+                onValueChange={(value) => setPaymentForm({ ...paymentForm, payment_status: value })}
+              >
+                <SelectTrigger id="status">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="aguardando_pagamento">Aguardando Pagamento</SelectItem>
+                  <SelectItem value="pago">Pago</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="amount">Valor Pago (R$)</Label>
+              <Input
+                id="amount"
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                value={paymentForm.payment_amount}
+                onChange={(e) => setPaymentForm({ ...paymentForm, payment_amount: e.target.value })}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="date">Data do Pagamento</Label>
+              <Input
+                id="date"
+                type="date"
+                value={paymentForm.payment_date}
+                onChange={(e) => setPaymentForm({ ...paymentForm, payment_date: e.target.value })}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="method">Método de Pagamento</Label>
+              <Select
+                value={paymentForm.payment_method}
+                onValueChange={(value) => setPaymentForm({ ...paymentForm, payment_method: value })}
+              >
+                <SelectTrigger id="method">
+                  <SelectValue placeholder="Selecione o método" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pix">PIX</SelectItem>
+                  <SelectItem value="cartao">Cartão</SelectItem>
+                  <SelectItem value="dinheiro">Dinheiro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="notes">Observações</Label>
+              <Textarea
+                id="notes"
+                placeholder="Adicione observações sobre o pagamento..."
+                value={paymentForm.payment_notes}
+                onChange={(e) => setPaymentForm({ ...paymentForm, payment_notes: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isSaving}>
+              Cancelar
+            </Button>
+            <Button onClick={handleSavePayment} disabled={isSaving}>
+              {isSaving ? "Salvando..." : "Salvar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
+
 
 
 
