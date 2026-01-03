@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { StageCurtain } from "@/components/stage-curtain"
 import { BalletParticles } from "@/components/ballet-particles"
 import { FloatingSilhouette } from "@/components/floating-silhouette"
-import { BallerinaSvgDrawing } from "@/components/ballerina-svg-drawing"
 import { BreathingBackground } from "@/components/breathing-background"
 import { RevealBar } from "@/components/reveal-bar"
 import { CurvedStrokeAnimation } from "@/components/curved-stroke-animation"
@@ -196,10 +195,21 @@ export default function Home() {
             <img src="/logo2.png" alt="Corpus Maria Logo" className="w-32 h-32 mx-auto object-contain opacity-80" />
           </motion.div>
 
-          <BallerinaSvgDrawing />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+            className="mb-8"
+          >
+            <img
+              src="/IMG_2596.jpg"
+              alt="Aula de Ballet Corpus Maria"
+              className="w-full max-w-md mx-auto rounded-2xl shadow-2xl object-cover"
+            />
+          </motion.div>
 
           <motion.div variants={titleVariants} initial="hidden" animate="visible" className="mb-6">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-foreground tracking-[0.3em] mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-[0.2em] sm:tracking-[0.3em] mb-8">
               {letters.map((letter, index) => (
                 <motion.span key={index} variants={letterVariants} className="inline-block">
                   {letter === " " ? "\u00A0" : letter}
@@ -215,7 +225,7 @@ export default function Home() {
             className="space-y-6"
           >
             <motion.h2 className="text-5xl sm:text-6xl lg:text-7xl font-light text-foreground tracking-tight leading-tight">
-              A elegância da <span className="text-primary">dança</span> clássica
+              promovendo saúde através da <span className="text-primary">dança</span> 
             </motion.h2>
 
             <motion.p
@@ -292,25 +302,24 @@ export default function Home() {
             <div className="space-y-2">
               <p className="text-sm font-light text-primary uppercase tracking-widest">Quem Somos</p>
               <h2 className="text-4xl sm:text-5xl font-light text-foreground">
-                Uma comunidade dedicada à arte da dança
+                Nosso grupo fornece um ambiente acolhendor para incentivar o desenvolvimento
               </h2>
             </div>
             <p className="text-lg text-foreground/60 font-light leading-relaxed">
-              Há mais de 15 anos, nossa academia cultiva a paixão pelo balé clássico. Nossos instrutores profissionais
-              guiam cada aluno em sua jornada de descoberta, movimento e expressão artística.
+              Há mais de 15 anos promovendo saúde, desenvolvimento,  disciplina através da Dança
             </p>
             <div className="pt-4 space-y-3">
               <div className="flex gap-4">
                 <div className="w-1 bg-primary rounded-full" />
-                <p className="text-foreground/70 font-light">Ambiente acolhedor e inclusivo</p>
+                <p className="text-foreground/70 font-light">Ambiente acolhedor e facilitador para o processo de aprendizagem.</p>
               </div>
               <div className="flex gap-4">
                 <div className="w-1 bg-primary rounded-full" />
-                <p className="text-foreground/70 font-light">Professores certificados internacionalmente</p>
+                <p className="text-foreground/70 font-light">Professores capacitados.</p>
               </div>
               <div className="flex gap-4">
                 <div className="w-1 bg-primary rounded-full" />
-                <p className="text-foreground/70 font-light">Apresentações e recitais anuais</p>
+                <p className="text-foreground/70 font-light">Espetataculo temático anual</p>
               </div>
             </div>
           </motion.div>
@@ -340,7 +349,7 @@ export default function Home() {
             {[
               { icon: "💪", title: "Físico", desc: "Desenvolva força, flexibilidade e resistência" },
               { icon: "🧘", title: "Postural", desc: "Melhore sua postura e alinhamento corporal" },
-              { icon: "🧠", title: "Psicológico", desc: "Alivie stress e cultive bem-estar mental" },
+              { icon: "🧠", title: "Psicol��gico", desc: "Alivie stress e cultive bem-estar mental" },
               { icon: "👥", title: "Social", desc: "Crie amizades em uma comunidade acolhedora" },
               { icon: "💖", title: "Emocional", desc: "Expresse-se através da arte e movimento" },
               { icon: "✨", title: "Confiança", desc: "Ganhe autoestima e segurança pessoal" },
@@ -394,11 +403,15 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4"
           >
             {[
-              { name: "Infantil 1", age: "3-5 anos", time: "Seg e Qua 14:00" },
-              { name: "Infantil 2", age: "6-8 anos", time: "Ter e Qui 15:00" },
-              { name: "Intermediária 1", age: "9-12 anos", time: "Seg e Qua 16:30" },
-              { name: "Intermediária 2", age: "13-16 anos", time: "Ter e Qui 18:00" },
-              { name: "Adulta", age: "17+", time: "Sab 10:00" },
+              // Segunda-feira
+              { name: "Segunda-feira - 17:30 às 18:30", age: "4, 5 e 6 anos", time: "Segunda-feira" },
+              { name: "Segunda-feira - 18:30 às 19:30", age: "7, 8 e 9 anos", time: "Segunda-feira" },
+              { name: "Segunda-feira - 19:30 às 20:30", age: "13, 14, 15, 16 e 17 anos", time: "Segunda-feira" },
+              // Terça-feira
+              { name: "Terça-feira - 9:30 às 10:30", age: "4, 5 e 6 anos", time: "Terça-feira" },
+              { name: "Terça-feira - 17:30 às 18:30", age: "4, 5 e 6 anos", time: "Terça-feira" },
+              { name: "Terça-feira - 18:30 às 19:30", age: "10, 11 e 12 anos", time: "Terça-feira" },
+              { name: "Terça-feira - 19:30 às 20:30", age: "10, 11 e 12 anos", time: "Terça-feira" },
             ].map((classe, idx) => (
               <motion.div
                 key={idx}
@@ -486,11 +499,11 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
                 <span className="text-2xl text-primary/60">✦</span>
               </div>
-              <h3 className="text-xl font-light text-foreground mb-2 text-center">MANUELA PAN</h3>
+              <h3 className="text-xl font-light text-foreground mb-2 text-center">Rafaela Zanella</h3>
               <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
-                <p>Bailarina do Corpu's Maria há 15 anos</p>
+                <p>Bailarina do Corpu's Maria há a 8 anos</p>
                 <p>Monitora e responsável pela recreação artística</p>
-                <p className="text-primary font-normal mt-4">Coordenadora das datas comemorativas do grupo</p>
+            
               </div>
             </motion.div>
           </motion.div>
@@ -714,7 +727,7 @@ export default function Home() {
             className="grid grid-cols-2 md:grid-cols-3 gap-4"
           >
             {[
-              { type: "image", src: "IMG_2455.jpg", alt: "Família Corpus Maria" },
+              { type: "image", src: "IMG_2455.jpg", alt: "Família Corpus Maria" },,
               { type: "image", src: "/IMG_2498.jpg", alt: "Evento Especial" },
               { type: "image", src: "IMG_2596.jpg", alt: "Celebração" },
               { type: "image", src: "alongamento.jpg", alt: "Momentos Inesquecíveis" },
@@ -856,7 +869,6 @@ export default function Home() {
             <h4 className="font-light text-foreground">Contato</h4>
             <ul className="space-y-2 text-sm font-light text-foreground/60">
               <li>(54) 99901-0633</li>
-              <li>contato@academiadebale.com.br</li>
               <li>Constantina, RS</li>
             </ul>
           </div>
@@ -865,13 +877,8 @@ export default function Home() {
             <h4 className="font-light text-foreground">Redes Sociais</h4>
             <ul className="space-y-2 text-sm font-light text-foreground/60">
               <li>
-                <a href="#" className="hover:text-primary transition">
+                <a href="https://www.instagram.com/corpusmariaa/" className="hover:text-primary transition">
                   Instagram
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition">
-                  Facebook
                 </a>
               </li>
             </ul>
@@ -885,3 +892,4 @@ export default function Home() {
     </div>
   )
 }
+

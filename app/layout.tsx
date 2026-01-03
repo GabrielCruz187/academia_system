@@ -9,11 +9,11 @@ const poppins = Poppins({ weight: ["300", "400", "500", "600", "700"], subsets: 
 export const metadata: Metadata = {
   title: "Corpus Maria - Matrícula Online",
   description: "Descubra a elegância e graça do balé clássico. Junte-se à nossa academia de dança premiada.",
-  generator: "v0.app",
+  generator: "",
   icons: {
     icon: [
       {
-        url: "/balé.jpg",
+        url: "/logo2.png",
         type: "image/svg+xml",
       },
     ],

@@ -7,7 +7,7 @@ import { Check, ArrowRight, Smartphone, Bell } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 
-const ENROLLMENT_FEE = 80.0
+const ENROLLMENT_FEE = 100.0
 
 function ConfirmacaoContent() {
   const searchParams = useSearchParams()
@@ -22,7 +22,7 @@ function ConfirmacaoContent() {
 
   const handleWhatsAppClick = () => {
     const message = encodeURIComponent(
-      "Olá! Gostaria de enviar o comprovante de inscrição na Academia de Balé. Realizei a inscrição e estou realizando o pagamento da taxa de inscrição de R$ 80,00.",
+      "Olá! Gostaria de enviar o comprovante de inscrição na Academia de Balé. Realizei a inscrição e estou realizando o pagamento da taxa de inscrição de R$ 100,00.",
     )
     window.open(`https://wa.me/?text=${message}`, "_blank")
   }
@@ -55,7 +55,7 @@ function ConfirmacaoContent() {
       <header className="border-b border-border/40 bg-white/40 backdrop-blur-sm">
         <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/images/bal-c3-a9.jpg" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
+            <img src="/logo2.png" alt="Corpus Maria Logo" className="w-8 h-8 rounded-full object-cover" />
             <Link href="/" className="text-foreground hover:text-primary transition font-light text-sm">
               Corpus Maria
             </Link>
