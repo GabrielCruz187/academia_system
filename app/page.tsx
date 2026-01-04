@@ -463,47 +463,64 @@ export default function Home() {
           >
             <motion.div
               variants={fadeInUp}
-              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl overflow-hidden hover:bg-white/80 transition group"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
-                <span className="text-2xl text-primary/60">✦</span>
+              <div className="aspect-[3/4] overflow-hidden">
+                <img
+                  src="/gio.jfif"
+                  alt="Giovana Alessi Toso"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
               </div>
-              <h3 className="text-xl font-light text-foreground mb-2 text-center">GIOVANA ALESSI TOSO</h3>
-              <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
-                <p>Psicóloga Especialista em Saúde Mental Coletiva</p>
-                <p>Professora de 1ª Año de Nível Elemental de Ballet Clássico</p>
-                <p>Pesquisadora do método dança movimento e terapia</p>
-                <p className="text-primary font-normal mt-4">Fundadora do Corpu's Maria</p>
+              <div className="p-8">
+                <h3 className="text-xl font-light text-foreground mb-2 text-center">GIOVANA ALESSI TOSO</h3>
+                <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
+                  <p>Psicóloga Especialista em Saúde Mental Coletiva</p>
+                  <p>Professora de 1ª Año de Nível Elemental de Ballet Clássico</p>
+                  <p>Pesquisadora do método dança movimento e terapia</p>
+                  <p className="text-primary font-normal mt-4">Fundadora do Corpu's Maria</p>
+                </div>
               </div>
             </motion.div>
 
             <motion.div
               variants={fadeInUp}
-              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl overflow-hidden hover:bg-white/80 transition group"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
-                <span className="text-2xl text-primary/60">✦</span>
+              <div className="aspect-[3/4] overflow-hidden">
+                <img
+                  src="/ana.jfif"
+                  alt="Ana Paula Potrich"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
               </div>
-              <h3 className="text-xl font-light text-foreground mb-2 text-center">ANA PAULA POTRICH</h3>
-              <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
-                <p>Bailarina do Corpu's Maria há mais de 10 anos</p>
-                <p>Monitora responsável pelas coreografias infantis</p>
-                <p className="text-primary font-normal mt-4">Diretora de marketing do Corpu's Maria</p>
+              <div className="p-8">
+                <h3 className="text-xl font-light text-foreground mb-2 text-center">ANA PAULA POTRICH</h3>
+                <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
+                  <p>Bailarina do Corpu's Maria há mais de 10 anos</p>
+                  <p>Monitora responsável pelas coreografias infantis</p>
+                  <p className="text-primary font-normal mt-4">Diretora de marketing do Corpu's Maria</p>
+                </div>
               </div>
             </motion.div>
 
             <motion.div
               variants={fadeInUp}
-              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl p-8 hover:bg-white/80 transition"
+              className="bg-white/60 backdrop-blur-sm border border-border/40 rounded-2xl overflow-hidden hover:bg-white/80 transition group"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-primary/30 to-primary/10 rounded-full mb-6 mx-auto flex items-center justify-center">
-                <span className="text-2xl text-primary/60">✦</span>
+              <div className="aspect-[3/4] overflow-hidden">
+                <img
+                  src="/rafa.jfif"
+                  alt="Rafaela Zanella"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
               </div>
-              <h3 className="text-xl font-light text-foreground mb-2 text-center">Rafaela Zanella</h3>
-              <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
-                <p>Bailarina do Corpu's Maria há a 8 anos</p>
-                <p>Monitora e responsável pela recreação artística</p>
-            
+              <div className="p-8">
+                <h3 className="text-xl font-light text-foreground mb-2 text-center">RAFAELA ZANELLA</h3>
+                <div className="space-y-2 text-center text-sm text-foreground/70 font-light">
+                  <p>Bailarina do Corpu's Maria há 8 anos</p>
+                  <p>Monitora e responsável pela recreação artística</p>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -511,6 +528,7 @@ export default function Home() {
       </motion.section>
 
       <motion.section
+
         id="uniformes"
         className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8"
         variants={sectionReveal}
@@ -892,4 +910,5 @@ export default function Home() {
     </div>
   )
 }
+
 
