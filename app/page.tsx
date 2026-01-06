@@ -648,7 +648,7 @@ export default function Home() {
           >
             {[
               { name: "Vida", image: "/vida.jpeg" },
-              { name: "Maravilha's", image: "/maravilha´s.jpeg" },
+              { name: "Maravilha's", image: "/Maravilha´s.jpeg" },
               { name: "Bela", image: "/bela.jpeg" },
               { name: "Rara", image: "/rara.jpeg" },
               { name: "Desejo", image: "/desejo.jpeg" },

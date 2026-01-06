@@ -309,7 +309,7 @@ export default function MatriculaPage() {
         >
           <p className="text-sm font-light text-foreground/70">
             Seus dados estão seguros e criptografados. A taxa de matrícula é de{" "}
-            <span className="text-primary font-light">R$ 80,00</span>.
+            <span className="text-primary font-light">R$ 100,00</span>.
           </p>
         </motion.div>
       </div>
