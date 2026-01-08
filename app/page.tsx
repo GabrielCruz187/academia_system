@@ -225,7 +225,7 @@ export default function Home() {
             className="space-y-6"
           >
             <motion.h2 className="text-5xl sm:text-6xl lg:text-7xl font-light text-foreground tracking-tight leading-tight">
-              promovendo saúde através da <span className="text-primary">dança</span> 
+              promovendo saúde através da <span className="text-primary">dança</span>
             </motion.h2>
 
             <motion.p
@@ -285,11 +285,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <div className="aspect-square rounded-2xl overflow-hidden shadow-xl">
-              <img
-                src="/IMG_2498.jpg"
-                alt="Corpus Maria - Quem Somos"
-                className="w-full h-full object-cover"
-              />
+              <img src="/IMG_2498.jpg" alt="Corpus Maria - Quem Somos" className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
@@ -302,16 +298,18 @@ export default function Home() {
             <div className="space-y-2">
               <p className="text-sm font-light text-primary uppercase tracking-widest">Quem Somos</p>
               <h2 className="text-4xl sm:text-5xl font-light text-foreground">
-                Nosso grupo fornece um ambiente acolhendor para incentivar o desenvolvimento
+                Nosso grupo fornece um ambiente acolhedor para incentivar o desenvolvimento
               </h2>
             </div>
             <p className="text-lg text-foreground/60 font-light leading-relaxed">
-              Há mais de 15 anos promovendo saúde, desenvolvimento,  disciplina através da Dança
+              Há mais de 15 anos promovendo saúde, desenvolvimento, disciplina através da Dança
             </p>
             <div className="pt-4 space-y-3">
               <div className="flex gap-4">
                 <div className="w-1 bg-primary rounded-full" />
-                <p className="text-foreground/70 font-light">Ambiente acolhedor e facilitador para o processo de aprendizagem.</p>
+                <p className="text-foreground/70 font-light">
+                  Ambiente acolhedor e facilitador para o processo de aprendizagem.
+                </p>
               </div>
               <div className="flex gap-4">
                 <div className="w-1 bg-primary rounded-full" />
@@ -349,7 +347,7 @@ export default function Home() {
             {[
               { icon: "💪", title: "Físico", desc: "Desenvolva força, flexibilidade e resistência" },
               { icon: "🧘", title: "Postural", desc: "Melhore sua postura e alinhamento corporal" },
-              { icon: "🧠", title: "Psicol��gico", desc: "Alivie stress e cultive bem-estar mental" },
+              { icon: "🧠", title: "Psicolgico", desc: "Alivie stress e cultive bem-estar mental" },
               { icon: "👥", title: "Social", desc: "Crie amizades em uma comunidade acolhedora" },
               { icon: "💖", title: "Emocional", desc: "Expresse-se através da arte e movimento" },
               { icon: "✨", title: "Confiança", desc: "Ganhe autoestima e segurança pessoal" },
@@ -528,7 +526,6 @@ export default function Home() {
       </motion.section>
 
       <motion.section
-
         id="uniformes"
         className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8"
         variants={sectionReveal}
@@ -745,7 +742,7 @@ export default function Home() {
             className="grid grid-cols-2 md:grid-cols-3 gap-4"
           >
             {[
-              { type: "image", src: "IMG_2455.jpg", alt: "Família Corpus Maria" },,
+              { type: "image", src: "IMG_2455.jpg", alt: "Família Corpus Maria" },
               { type: "image", src: "/IMG_2498.jpg", alt: "Evento Especial" },
               { type: "image", src: "IMG_2596.jpg", alt: "Celebração" },
               { type: "image", src: "alongamento.jpg", alt: "Momentos Inesquecíveis" },
@@ -804,6 +801,19 @@ export default function Home() {
             <p className="text-lg text-foreground/60 font-light">
               Matricule-se agora e descubra a beleza do balé clássico
             </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className="flex flex-col items-center gap-3 py-6"
+          >
+            <p className="text-sm font-light text-primary uppercase tracking-widest">Mensalidade</p>
+            <div className="bg-white/80 backdrop-blur-sm border-2 border-primary/30 rounded-2xl px-8 py-6 shadow-lg">
+              <p className="text-5xl sm:text-6xl font-light text-primary mb-1">R$ 100,00</p>
+              <p className="text-sm text-foreground/60 font-light">por mês</p>
+            </div>
           </motion.div>
 
           <motion.div
