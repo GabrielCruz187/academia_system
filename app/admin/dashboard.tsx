@@ -133,6 +133,13 @@ export default function AdminDashboard({ user }: { user: any }) {
     return phone.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3")
   }
 
+  const formatCurrency = (value: number) => {
+    return value.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
+
   const filteredEnrollments = enrollments.filter((e) => {
     if (filter === "all") return true
     if (filter === "paid") return e.payment_status === "pago"
@@ -225,7 +232,9 @@ export default function AdminDashboard({ user }: { user: any }) {
           <Card className="bg-white/60 backdrop-blur">
             <CardContent className="pt-4 sm:pt-6">
               <div className="text-xs sm:text-sm font-light text-muted-foreground mb-1">Receita Total</div>
-              <div className="text-lg sm:text-xl font-light text-primary">R$ {totalEnrollmentRevenue}</div>
+              <div className="text-lg sm:text-xl font-light text-primary">
+                R$ {formatCurrency(totalEnrollmentRevenue)}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -574,4 +583,3 @@ export default function AdminDashboard({ user }: { user: any }) {
     </div>
   )
 }
-
