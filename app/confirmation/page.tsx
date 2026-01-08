@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { Check, ArrowRight, Smartphone, Bell } from "lucide-react"
+import { Check, Smartphone, Bell } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 
@@ -126,54 +126,70 @@ function ConfirmacaoContent() {
             </div>
 
             <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
-              <p className="text-sm font-light text-foreground/80">
-                Escolha uma forma de pagamento para completar sua matrícula
+              <p className="text-sm font-light text-foreground/80 mb-3">
+                Realize o pagamento via <strong>PIX</strong> para completar sua matrícula
               </p>
+              <p className="text-xs text-foreground/60 font-light">Use a chave PIX abaixo para efetuar o pagamento</p>
             </div>
           </div>
         </motion.div>
 
-        {/* Payment Methods */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
-        >
-          {/* PIX */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mb-8">
+          {/* PIX Payment Card */}
           <motion.div
             whileHover={{ y: -5 }}
-            className="bg-white/60 backdrop-blur border border-border/40 rounded-xl p-6 hover:border-primary/20 transition"
+            className="bg-white/60 backdrop-blur border border-primary/20 rounded-xl p-8 hover:border-primary/30 transition max-w-2xl mx-auto"
           >
-            <h3 className="text-lg font-light text-foreground mb-4">Transferência PIX</h3>
-            <div className="bg-white rounded-lg p-6 flex items-center justify-center border-2 border-dashed border-primary/20 mb-4">
-              <div className="text-center">
-                <div className="text-5xl mb-2">✦</div>
-                <p className="text-xs text-foreground/60 font-light">QR Code PIX</p>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Smartphone className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="text-xl font-light text-foreground">Pagamento via PIX</h3>
+            </div>
+
+            {/* PIX Key */}
+            <div className="bg-gradient-to-br from-primary/5 to-pink-50/50 rounded-lg p-6 mb-6">
+              <p className="text-xs font-light text-foreground/60 uppercase tracking-widest mb-3 text-center">
+                Chave PIX (Copie e Cole)
+              </p>
+              <div className="bg-white rounded-lg p-4 border-2 border-dashed border-primary/30">
+                <p className="text-center font-mono text-sm sm:text-base text-foreground break-all select-all">
+                  d5ed3185-7053-4fae-982d-95e2022331c2
+                </p>
+              </div>
+              <p className="text-xs text-foreground/60 font-light text-center mt-3">
+                Clique no texto acima para selecionar e copiar a chave
+              </p>
+            </div>
+
+            {/* Instructions */}
+            <div className="space-y-3 bg-blue-50/50 border border-blue-200/40 rounded-lg p-5">
+              <p className="text-sm font-medium text-blue-900 mb-2">Como pagar:</p>
+              <ol className="text-xs text-blue-900/80 font-light space-y-2 list-decimal list-inside">
+                <li>Abra o aplicativo do seu banco</li>
+                <li>
+                  Selecione a opção <strong>PIX → Pix Copia e Cola</strong>
+                </li>
+                <li>Cole a chave PIX acima</li>
+                <li>
+                  Confirme o valor de <strong>R$ 100,00</strong>
+                </li>
+                <li>Complete o pagamento</li>
+                <li>Guarde o comprovante para enviar via WhatsApp</li>
+              </ol>
+            </div>
+
+            {/* Amount Highlight */}
+            <div className="mt-6 bg-gradient-to-r from-primary/10 to-pink-100/50 rounded-lg p-4 border border-primary/20">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-light text-foreground/80">Valor a pagar:</span>
+                <span className="text-2xl font-light text-primary">R$ 100,00</span>
               </div>
             </div>
-            <p className="text-xs text-foreground/60 font-light text-center">Escaneie o código com seu banco</p>
-          </motion.div>
-
-          {/* Credit Card */}
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="bg-white/60 backdrop-blur border border-border/40 rounded-xl p-6 hover:border-primary/20 transition"
-          >
-            <h3 className="text-lg font-light text-foreground mb-4">Cartão de Crédito</h3>
-            <a
-              href="https://payment-link-v3.stone.com.br/pl_93xpWRkLjgzNAeeC3HpAbQ4e0E8MwO1o"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-light py-4 transition-all hover:shadow-lg text-center"
-            >
-              Pagar com Cartão
-              <ArrowRight className="w-4 h-4 inline ml-2" />
-            </a>
-            <p className="text-xs text-foreground/60 font-light text-center mt-4">Parcelamento disponível</p>
           </motion.div>
         </motion.div>
 
+        {/* Próximo Passo: Notificações */}
         <motion.div
           {...fadeInUp}
           transition={{ delay: 0.4 }}
@@ -238,7 +254,7 @@ function ConfirmacaoContent() {
           <div className="space-y-4">
             {[
               { num: "1", text: "Clique em 'Notificar a Academia' para avisar sobre sua matrícula" },
-              { num: "2", text: "Escolha uma forma de pagamento (PIX ou Cartão)" },
+              { num: "2", text: "Realize o pagamento via PIX usando a chave fornecida" },
               { num: "3", text: "Complete o pagamento seguindo as instruções" },
               { num: "4", text: "Clique em 'Enviar Comprovante' e anexe o comprovante de pagamento" },
               { num: "5", text: "Aguarde a confirmação e receba seu horário das aulas" },
@@ -285,3 +301,4 @@ export default function ConfirmacaoPage() {
     </Suspense>
   )
 }
+
